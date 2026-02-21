@@ -6,6 +6,11 @@ A Claude Code plugin that compares git branches side-by-side in [Beyond Compare]
 
 Creates temporary git worktrees for the requested branches and opens them in Beyond Compare for a full directory comparison. Existing worktrees are reused when available. Temporary worktrees are cleaned up automatically.
 
+## Supported platforms
+
+- **macOS** and **Linux** — works anywhere Beyond Compare and `bcomp` are available
+- **Windows** — requires WSL or Git Bash
+
 ## Prerequisites
 
 - [Beyond Compare](https://www.scootersoftware.com/) with CLI tools installed (`bcomp` on PATH)
@@ -13,7 +18,8 @@ Creates temporary git worktrees for the requested branches and opens them in Bey
 
 ### Installing Beyond Compare CLI tools
 
-Beyond Compare → Menu → Install Command Line Tools
+- **macOS**: Beyond Compare → Menu → Install Command Line Tools
+- **Linux**: The `bcomp` command is included in the Beyond Compare package (`deb`/`rpm`)
 
 ## Installation
 
