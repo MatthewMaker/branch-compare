@@ -1,0 +1,11 @@
+{
+  "name": "bcomp-branches",
+  "version": "1.0.0",
+  "description": "Compare git branches side-by-side in Beyond Compare",
+  "author": {
+    "name": "Trip Kendall"
+  },
+  "repository": "https://github.com/MatthewMaker/bcomp-branches",
+  "license": "MIT",
+  "keywords": ["beyond-compare", "git", "diff", "branches", "worktree"]
+}
