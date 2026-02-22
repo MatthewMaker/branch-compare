@@ -29,7 +29,7 @@ claude plugin install MatthewMaker/branch-compare
 
 ## Usage
 
-Inside Claude Code, use the slash command:
+Inside Claude Code, use the slash command (`/bcomp` also works as a shorthand):
 
 ```
 /branch-compare                    # current branch vs develop
