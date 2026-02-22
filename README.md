@@ -93,6 +93,15 @@ export BRANCH_COMPARE_TOOL="code --diff"
 5. Opens both worktree roots in the configured diff tool
 6. Cleans up temporary worktrees after the tool exits
 
+## Releasing
+
+1. Update version in `plugins/branch-compare/plugin.json`
+2. Update version in `.claude-plugin/marketplace.json`
+3. Add entry to `CHANGELOG.md`
+4. Commit: `git commit -m "chore: bump version to X.Y.Z"`
+5. Tag: `git tag vX.Y.Z`
+6. Push: `git push && git push --tags`
+
 ## License
 
 MIT
