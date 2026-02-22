@@ -5,13 +5,13 @@ description: >-
   to Beyond Compare) and temporary worktrees. Use when the user wants to visually
   diff branches, compare branch contents, or open a folder comparison between two
   git refs. Defaults to comparing the current branch against develop.
-argument-hint: [branch1] [branch2]
+argument-hint: "[branch1] [branch2]"
 allowed-tools:
-  - Bash(bash ${CLAUDE_PLUGIN_ROOT}/scripts/branch-compare.sh:*)
-  - Bash(git branch:*)
-  - Bash(git worktree:*)
-  - Bash(git rev-parse:*)
-  - Bash(git fetch:*)
+  - "Bash(bash ${CLAUDE_PLUGIN_ROOT}/scripts/branch-compare.sh:*)"
+  - "Bash(git branch:*)"
+  - "Bash(git worktree:*)"
+  - "Bash(git rev-parse:*)"
+  - "Bash(git fetch:*)"
 ---
 
 Compare two git branches using a configurable diff tool and worktrees.
