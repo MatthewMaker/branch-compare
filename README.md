@@ -23,8 +23,11 @@ Creates temporary git worktrees for the requested branches and opens them in you
 
 ## Installation
 
-```bash
-claude plugin install MatthewMaker/branch-compare
+From within Claude Code, run:
+
+```
+/plugin marketplace add MatthewMaker/branch-compare
+/plugin install branch-compare@MatthewMaker
 ```
 
 ## Usage
