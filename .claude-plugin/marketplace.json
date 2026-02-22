@@ -15,7 +15,7 @@
       },
       "source": "./plugins/branch-compare",
       "category": "development",
-      "homepage": "https://github.com/MatthewMaker/bcomp-branches"
+      "homepage": "https://github.com/MatthewMaker/branch-compare"
     }
   ]
 }
