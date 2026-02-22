@@ -13,7 +13,7 @@
       "author": {
         "name": "Trip Kendall"
       },
-      "source": ".",
+      "source": "./plugins/bcomp-branches",
       "category": "development",
       "homepage": "https://github.com/MatthewMaker/bcomp-branches"
     }
