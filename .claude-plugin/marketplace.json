@@ -3,7 +3,7 @@
   "name": "branch-compare",
   "description": "Compare git branches side-by-side using a configurable diff tool",
   "owner": {
-    "name": "Trip Kendall"
+    "name": "Matt Maker"
   },
   "plugins": [
     {
@@ -11,7 +11,7 @@
       "description": "Compare git branches side-by-side using a configurable diff tool and worktrees",
       "version": "1.1.0",
       "author": {
-        "name": "Trip Kendall"
+        "name": "Matt Maker"
       },
       "source": "./plugins/branch-compare",
       "category": "development",
