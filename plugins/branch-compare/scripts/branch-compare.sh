@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# bcomp-branches: Open Beyond Compare on the worktree roots of two git branches.
+# branch-compare: Open a diff tool on the worktree roots of two git branches.
 #
-# Usage: bcomp-branches [--no-prompt] [branch1] [branch2]
+# Usage: branch-compare [--no-prompt] [branch1] [branch2]
 #   branch1 defaults to the current branch
 #   branch2 defaults to "develop"
 #
 # Options:
 #   --no-prompt   Auto-delete temporary worktrees without prompting (for non-interactive use)
+#
+# The comparison tool is resolved in priority order:
+#   1. BRANCH_COMPARE_TOOL environment variable
+#   2. compare_tool setting in .claude/branch-compare.local.md frontmatter
+#   3. Default: bcomp (Beyond Compare)
 #
 # For each branch, if a worktree already exists, its path is used.
 # Otherwise a temporary worktree is created and cleaned up afterward.
@@ -25,11 +30,33 @@ for arg in "$@"; do
 done
 set -- "${args[@]+"${args[@]}"}"
 
+# --- Resolve comparison tool ---
+# Priority: env var > settings file > default (bcomp)
+
+COMPARE_TOOL="${BRANCH_COMPARE_TOOL:-}"
+
+if [[ -z "$COMPARE_TOOL" ]]; then
+  STATE_FILE=".claude/branch-compare.local.md"
+  if [[ -f "$STATE_FILE" ]]; then
+    FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE")
+    COMPARE_TOOL=$(echo "$FRONTMATTER" | grep '^compare_tool:' | sed 's/compare_tool: *//' | sed 's/^"\(.*\)"$/\1/')
+  fi
+fi
+
+COMPARE_TOOL="${COMPARE_TOOL:-bcomp}"
+
 # --- Pre-flight checks ---
 
-if ! command -v bcomp &>/dev/null; then
-  echo "Error: 'bcomp' not found on PATH." >&2
-  echo "Install Beyond Compare and its CLI tools: https://www.scootersoftware.com/" >&2
+# Split COMPARE_TOOL into command and fixed args (e.g., "code --diff" → cmd=code)
+read -ra COMPARE_CMD <<< "$COMPARE_TOOL"
+
+if ! command -v "${COMPARE_CMD[0]}" &>/dev/null; then
+  echo "Error: '${COMPARE_CMD[0]}' not found on PATH." >&2
+  if [[ "${COMPARE_CMD[0]}" == "bcomp" ]]; then
+    echo "Install Beyond Compare and its CLI tools: https://www.scootersoftware.com/" >&2
+  else
+    echo "Ensure '${COMPARE_CMD[0]}' is installed and on your PATH." >&2
+  fi
   exit 1
 fi
 
@@ -140,7 +167,7 @@ path_for_branch() {
   local sanitized
   sanitized=$(echo "$branch" | tr '/' '-')
   local tmpdir
-  tmpdir="$(git rev-parse --show-toplevel)/../.bcomp-tmp-${sanitized}-$$"
+  tmpdir="$(git rev-parse --show-toplevel)/../.branch-compare-tmp-${sanitized}-$$"
   echo "Creating temporary worktree for '$branch' at $tmpdir ..." >&2
   git worktree add "$tmpdir" "$ref" --detach >/dev/null 2>&1
   TEMP_WORKTREES+=("$tmpdir")
@@ -153,8 +180,9 @@ PATH2=$(path_for_branch "$BRANCH2")
 echo "Comparing:"
 echo "  Left:  $PATH1  ($BRANCH1)"
 echo "  Right: $PATH2  ($BRANCH2)"
+echo "  Tool:  $COMPARE_TOOL"
 echo ""
 
-bcomp "$PATH1" "$PATH2"
+"${COMPARE_CMD[@]}" "$PATH1" "$PATH2"
 
 cleanup_temps

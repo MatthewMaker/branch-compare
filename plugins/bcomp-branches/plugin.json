@@ -1,8 +1,0 @@
-{
-  "name": "bcomp-branches",
-  "description": "Compare git branches side-by-side in Beyond Compare using worktrees",
-  "version": "1.0.0",
-  "author": {
-    "name": "Trip Kendall"
-  }
-}
