@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] - 2026-02-22
+
+### Fixed
+- YAML frontmatter in SKILL.md quoted to fix GitHub rendering error
+
 ## [1.1.0] - 2026-02-21
 
 ### Added
@@ -30,5 +35,6 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 - Automatic worktree creation and cleanup
 - Interactive and non-interactive modes
 
+[1.1.1]: https://github.com/MatthewMaker/branch-compare/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/MatthewMaker/branch-compare/releases/tag/v1.0.0
