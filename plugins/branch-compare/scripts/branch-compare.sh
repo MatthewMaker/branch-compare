@@ -3,12 +3,17 @@ set -euo pipefail
 
 # branch-compare: Open a diff tool on the worktree roots of two git branches.
 #
-# Usage: branch-compare [--no-prompt] [branch1] [branch2]
+# Usage: branch-compare [--no-prompt] [--filter=<preset|raw|none>] [branch1] [branch2]
 #   branch1 defaults to the current branch
 #   branch2 defaults to "develop"
 #
 # Options:
-#   --no-prompt   Auto-delete temporary worktrees without prompting (for non-interactive use)
+#   --no-prompt           Auto-delete temporary worktrees without prompting (for non-interactive use)
+#   --filter=<value>      Set filter masks for the comparison tool:
+#                           - A preset name (unity, web, python, godot)
+#                           - A raw filter string (passed directly)
+#                           - "none" to disable auto-detection
+#                         If omitted, auto-detection runs based on project structure.
 #
 # The comparison tool is resolved in priority order:
 #   1. BRANCH_COMPARE_TOOL environment variable
@@ -18,13 +23,23 @@ set -euo pipefail
 # For each branch, if a worktree already exists, its path is used.
 # Otherwise a temporary worktree is created and cleaned up afterward.
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# --- Source filter helpers ---
+source "$PLUGIN_ROOT/filters/presets.sh"
+source "$PLUGIN_ROOT/filters/detect.sh"
+
 # --- Parse flags ---
 
 NO_PROMPT=false
+FILTER_FLAG=""
+FILTER_FLAG_SET=false
 args=()
 for arg in "$@"; do
   case "$arg" in
     --no-prompt) NO_PROMPT=true ;;
+    --filter=*) FILTER_FLAG="${arg#--filter=}"; FILTER_FLAG_SET=true ;;
     *) args+=("$arg") ;;
   esac
 done
@@ -44,6 +59,58 @@ if [[ -z "$COMPARE_TOOL" ]]; then
 fi
 
 COMPARE_TOOL="${COMPARE_TOOL:-bcomp}"
+
+# --- Resolve filters ---
+# Priority: --filter flag > settings file frontmatter > auto-detect > none
+
+FILTER_STRING=""
+FILTER_SOURCE=""
+
+if [[ "$FILTER_FLAG_SET" == true ]]; then
+  if [[ "$FILTER_FLAG" == "none" ]]; then
+    FILTER_STRING=""
+    FILTER_SOURCE="disabled (--filter=none)"
+  elif [[ -n "${FILTER_PRESETS[$FILTER_FLAG]+x}" ]]; then
+    FILTER_STRING="${FILTER_PRESETS[$FILTER_FLAG]}"
+    FILTER_SOURCE="preset '$FILTER_FLAG'"
+  else
+    # Treat as raw filter string
+    FILTER_STRING="$FILTER_FLAG"
+    FILTER_SOURCE="custom (--filter)"
+  fi
+else
+  # Check settings file for filters
+  SETTINGS_FILTER=""
+  STATE_FILE=".claude/branch-compare.local.md"
+  if [[ -f "$STATE_FILE" ]]; then
+    FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE")
+    SETTINGS_FILTER=$(echo "$FRONTMATTER" | grep '^filters:' | sed 's/filters: *//' | sed 's/^"\(.*\)"$/\1/')
+  fi
+
+  if [[ -n "$SETTINGS_FILTER" ]]; then
+    if [[ "$SETTINGS_FILTER" == "none" ]]; then
+      FILTER_STRING=""
+      FILTER_SOURCE="disabled (settings)"
+    elif [[ -n "${FILTER_PRESETS[$SETTINGS_FILTER]+x}" ]]; then
+      FILTER_STRING="${FILTER_PRESETS[$SETTINGS_FILTER]}"
+      FILTER_SOURCE="preset '$SETTINGS_FILTER' (settings)"
+    else
+      FILTER_STRING="$SETTINGS_FILTER"
+      FILTER_SOURCE="custom (settings)"
+    fi
+  else
+    # Auto-detect from repo root
+    REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
+    if [[ -n "$REPO_ROOT" ]]; then
+      DETECTED=$(detect_project_type "$REPO_ROOT")
+      if [[ -n "$DETECTED" && -n "${FILTER_PRESETS[$DETECTED]+x}" ]]; then
+        FILTER_STRING="${FILTER_PRESETS[$DETECTED]}"
+        FILTER_SOURCE="auto-detected '$DETECTED' project"
+        echo "Auto-detected $DETECTED project, applying '$DETECTED' filters"
+      fi
+    fi
+  fi
+fi
 
 # --- Pre-flight checks ---
 
@@ -181,8 +248,17 @@ echo "Comparing:"
 echo "  Left:  $PATH1  ($BRANCH1)"
 echo "  Right: $PATH2  ($BRANCH2)"
 echo "  Tool:  $COMPARE_TOOL"
+if [[ -n "$FILTER_STRING" ]]; then
+  echo "  Filter: $FILTER_SOURCE"
+fi
 echo ""
 
-"${COMPARE_CMD[@]}" "$PATH1" "$PATH2"
+# Build command with optional filters
+EXTRA_ARGS=()
+if [[ -n "$FILTER_STRING" ]]; then
+  EXTRA_ARGS+=("-filters=$FILTER_STRING")
+fi
+
+"${COMPARE_CMD[@]}" "${EXTRA_ARGS[@]}" "$PATH1" "$PATH2"
 
 cleanup_temps
