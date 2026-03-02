@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [Semantic Versioning](https://semver.org/).
 
+## [1.2.1] - 2026-03-01
+
+### Removed
+- `/bcomp` shorthand alias — with only one skill, the command appears as just `/branch-compare` without redundant namespacing
+
 ## [1.2.0] - 2026-02-26
 
 ### Added
@@ -44,6 +49,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 - Automatic worktree creation and cleanup
 - Interactive and non-interactive modes
 
+[1.2.1]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/MatthewMaker/branch-compare/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.0.0...v1.1.0
