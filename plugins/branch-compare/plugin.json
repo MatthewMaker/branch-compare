@@ -1,7 +1,7 @@
 {
   "name": "branch-compare",
   "description": "Compare git branches side-by-side using a configurable diff tool and worktrees",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "author": {
     "name": "Matt Maker"
   }

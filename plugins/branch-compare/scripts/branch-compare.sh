@@ -70,8 +70,8 @@ if [[ "$FILTER_FLAG_SET" == true ]]; then
   if [[ "$FILTER_FLAG" == "none" ]]; then
     FILTER_STRING=""
     FILTER_SOURCE="disabled (--filter=none)"
-  elif [[ -n "${FILTER_PRESETS[$FILTER_FLAG]+x}" ]]; then
-    FILTER_STRING="${FILTER_PRESETS[$FILTER_FLAG]}"
+  elif PRESET_VALUE=$(get_filter_preset "$FILTER_FLAG"); then
+    FILTER_STRING="$PRESET_VALUE"
     FILTER_SOURCE="preset '$FILTER_FLAG'"
   else
     # Treat as raw filter string
@@ -91,8 +91,8 @@ else
     if [[ "$SETTINGS_FILTER" == "none" ]]; then
       FILTER_STRING=""
       FILTER_SOURCE="disabled (settings)"
-    elif [[ -n "${FILTER_PRESETS[$SETTINGS_FILTER]+x}" ]]; then
-      FILTER_STRING="${FILTER_PRESETS[$SETTINGS_FILTER]}"
+    elif PRESET_VALUE=$(get_filter_preset "$SETTINGS_FILTER"); then
+      FILTER_STRING="$PRESET_VALUE"
       FILTER_SOURCE="preset '$SETTINGS_FILTER' (settings)"
     else
       FILTER_STRING="$SETTINGS_FILTER"
@@ -103,8 +103,8 @@ else
     REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
     if [[ -n "$REPO_ROOT" ]]; then
       DETECTED=$(detect_project_type "$REPO_ROOT")
-      if [[ -n "$DETECTED" && -n "${FILTER_PRESETS[$DETECTED]+x}" ]]; then
-        FILTER_STRING="${FILTER_PRESETS[$DETECTED]}"
+      if [[ -n "$DETECTED" ]] && PRESET_VALUE=$(get_filter_preset "$DETECTED"); then
+        FILTER_STRING="$PRESET_VALUE"
         FILTER_SOURCE="auto-detected '$DETECTED' project"
         echo "Auto-detected $DETECTED project, applying '$DETECTED' filters"
       fi
@@ -191,7 +191,7 @@ cleanup_temps() {
     echo "Done."
   else
     read -rp "Delete them? [Y/n] " answer
-    if [[ "${answer,,}" != "n" ]]; then
+    if [[ "$answer" != "n" && "$answer" != "N" ]]; then
       for wt in "${TEMP_WORKTREES[@]}"; do
         echo "Removing $wt ..."
         git worktree remove --force "$wt"

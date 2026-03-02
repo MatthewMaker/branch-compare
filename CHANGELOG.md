@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [Semantic Versioning](https://semver.org/).
 
+## [1.2.2] - 2026-03-01
+
+### Fixed
+- Bash 3.2 compatibility (macOS default) — replaced `declare -A` associative array and `${var,,}` lowercase syntax with portable alternatives
+
 ## [1.2.1] - 2026-03-01
 
 ### Removed
