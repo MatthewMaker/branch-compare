@@ -173,6 +173,7 @@ for branch in "$BRANCH1" "$BRANCH2"; do
 done
 
 TEMP_WORKTREES=()
+TEMP_MARKER=".branch-compare-tmp-"
 
 cleanup_temps() {
   if [[ ${#TEMP_WORKTREES[@]} -eq 0 ]]; then
@@ -234,15 +235,27 @@ path_for_branch() {
   local sanitized
   sanitized=$(echo "$branch" | tr '/' '-')
   local tmpdir
-  tmpdir="$(git rev-parse --show-toplevel)/../.branch-compare-tmp-${sanitized}-$$"
+  tmpdir="$(git rev-parse --show-toplevel)/../${TEMP_MARKER}${sanitized}-$$"
   echo "Creating temporary worktree for '$branch' at $tmpdir ..." >&2
   git worktree add "$tmpdir" "$ref" --detach >/dev/null 2>&1
-  TEMP_WORKTREES+=("$tmpdir")
+  # NOTE: this function is called via $(...), i.e. in a subshell, so it cannot
+  # append to the parent's TEMP_WORKTREES. The caller recognises temp paths by
+  # the TEMP_MARKER pattern and registers them itself.
   echo "$tmpdir"
 }
 
 PATH1=$(path_for_branch "$BRANCH1")
 PATH2=$(path_for_branch "$BRANCH2")
+
+# Register temp worktrees in the parent shell (see NOTE in path_for_branch), and
+# clean them up on ANY exit — including a failure part-way through — rather than
+# only on the happy path.
+for p in "$PATH1" "$PATH2"; do
+  case "$p" in
+    *"/${TEMP_MARKER}"*"-$$") TEMP_WORKTREES+=("$p") ;;
+  esac
+done
+trap cleanup_temps EXIT
 
 echo "Comparing:"
 echo "  Left:  $PATH1  ($BRANCH1)"
@@ -259,6 +272,7 @@ if [[ -n "$FILTER_STRING" ]]; then
   EXTRA_ARGS+=("-filters=$FILTER_STRING")
 fi
 
-"${COMPARE_CMD[@]}" "${EXTRA_ARGS[@]}" "$PATH1" "$PATH2"
-
-cleanup_temps
+# ${arr[@]+"${arr[@]}"}: an empty array is an unbound variable under `set -u`
+# on bash < 4.4 (macOS ships 3.2), so plain "${EXTRA_ARGS[@]}" aborts whenever no
+# filter applies. Same idiom as the `set --` above.
+"${COMPARE_CMD[@]}" ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"} "$PATH1" "$PATH2"

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [Semantic Versioning](https://semver.org/).
 
+## [1.2.3] - 2026-08-28
+
+### Fixed
+- Script aborted with `EXTRA_ARGS[@]: unbound variable` whenever no filter applied (no `--filter`, no settings entry, no auto-detected project type) — an empty array is unbound under `set -u` on bash 3.2
+- Temporary worktrees were never cleaned up: `path_for_branch` runs in a `$(...)` subshell, so its `TEMP_WORKTREES` append never reached the parent and `cleanup_temps` always saw an empty list. Temp paths are now registered in the parent shell
+- Cleanup now runs on any exit via an `EXIT` trap, so a failure after the worktree is created (such as the crash above) no longer strands it
+
 ## [1.2.2] - 2026-03-01
 
 ### Fixed
