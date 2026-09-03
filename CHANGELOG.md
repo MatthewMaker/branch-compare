@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [Semantic Versioning](https://semver.org/).
 
+## [1.2.4] - 2026-09-03
+
+### Changed
+- `unity` filter preset also excludes `.superpowers/`, `.DS_Store`, and `mono_crash*` (`.git/` was already excluded)
+
 ## [1.2.3] - 2026-08-28
 
 ### Fixed
