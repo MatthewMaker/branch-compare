@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Renamed the skill from `branch-compare` to `compare`, so its full name is `branch-compare:compare` instead of `branch-compare:branch-compare`
+
 ## [1.2.3] - 2026-08-28
 
 ### Fixed
