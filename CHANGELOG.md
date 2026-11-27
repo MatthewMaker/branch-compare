@@ -6,7 +6,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 
 ## [Unreleased]
 
-## [1.3.0] - 2026-11-27
+## [2.0.0] - 2026-11-27
 
 ### Added
 - Either argument can be a commit SHA, tag or other commit-ish (`HEAD~1`, `v1.0^`), not only a branch name. It is checked out in a temporary detached worktree
@@ -76,8 +76,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 - Automatic worktree creation and cleanup
 - Interactive and non-interactive modes
 
-[Unreleased]: https://github.com/MatthewMaker/branch-compare/compare/v1.3.0...HEAD
-[1.3.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.4...v1.3.0
+[Unreleased]: https://github.com/MatthewMaker/branch-compare/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.4...v2.0.0
 [1.2.4]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.1...v1.2.2
