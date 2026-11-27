@@ -27,8 +27,19 @@ From within Claude Code, run:
 
 ```
 /plugin marketplace add MatthewMaker/branch-compare
-/plugin install branch-compare@MatthewMaker
+/plugin install branch-compare@branch-compare
 ```
+
+The marketplace is registered under the name in `marketplace.json`, `branch-compare`, not the GitHub owner. `branch-compare@MatthewMaker` fails with "Marketplace 'MatthewMaker' not found".
+
+To update:
+
+```
+/plugin marketplace update branch-compare
+/plugin update branch-compare@branch-compare
+```
+
+Restart Claude Code to load the new version. From a shell: `claude plugin marketplace update branch-compare` and `claude plugin update branch-compare@branch-compare -y`.
 
 ## Usage
 

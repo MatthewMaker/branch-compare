@@ -8,6 +8,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 
 ### Added
 - Either argument can be a commit SHA, tag or other commit-ish (`HEAD~1`, `v1.0^`), not only a branch name. It is checked out in a temporary detached worktree
+## [1.2.4] - 2026-09-03
+
+### Changed
+- `unity` filter preset also excludes `.superpowers/`, `.DS_Store`, `mono_crash*`, and files named exactly `.git` (the gitlink file in a worktree; the `.git/` folder mask was already there)
 
 ## [1.2.3] - 2026-08-28
 
