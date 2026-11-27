@@ -7,7 +7,7 @@
 
 get_filter_preset() {
   case "$1" in
-    unity)  echo "-.git/;-*.csproj;-*.sln;-*.userprefs;-*.pidb;-*.unityproj;-.vs/;-*_DoNotShip/;-ExportedObj/;-.vscode/;-.idea/;-.utmp/;-.bezisidekick/;-Library/;-Temp/;-Logs/;-obj/;-Build/;-Builds/;-UserSettings/;-.gradle/" ;;
+    unity)  echo "-.git/;-.git;-*.csproj;-*.sln;-*.userprefs;-*.pidb;-*.unityproj;-.vs/;-*_DoNotShip/;-ExportedObj/;-.vscode/;-.idea/;-.utmp/;-.bezisidekick/;-Library/;-Temp/;-Logs/;-obj/;-Build/;-Builds/;-UserSettings/;-.gradle/;-.superpowers/;-.DS_Store;-mono_crash*" ;;
     web)    echo "-node_modules/;-dist/;-build/;-.next/;-.nuxt/;-coverage/;-.cache/;-.parcel-cache/" ;;
     python) echo "-__pycache__/;-.venv/;-venv/;-.mypy_cache/;-.pytest_cache/;-*.egg-info/;-.tox/;-htmlcov/" ;;
     godot)  echo "-addons/;-.godot/;-.import/" ;;

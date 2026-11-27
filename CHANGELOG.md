@@ -6,8 +6,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 
 ## [Unreleased]
 
+### Added
+- Either argument can be a commit SHA, tag or other commit-ish (`HEAD~1`, `v1.0^`), not only a branch name. It is checked out in a temporary detached worktree
+
 ### Changed
 - Renamed the skill from `branch-compare` to `compare`, so its full name is `branch-compare:compare` instead of `branch-compare:branch-compare`
+
+## [1.2.4] - 2026-09-03
+
+### Changed
+- `unity` filter preset also excludes `.superpowers/`, `.DS_Store`, `mono_crash*`, and files named exactly `.git` (the gitlink file in a worktree; the `.git/` folder mask was already there)
 
 ## [1.2.3] - 2026-08-28
 
@@ -66,6 +74,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 - Automatic worktree creation and cleanup
 - Interactive and non-interactive modes
 
+[1.2.4]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.3...v1.2.4
+[1.2.3]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.2...v1.2.3
+[1.2.2]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/MatthewMaker/branch-compare/compare/v1.1.0...v1.1.1

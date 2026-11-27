@@ -27,8 +27,19 @@ From within Claude Code, run:
 
 ```
 /plugin marketplace add MatthewMaker/branch-compare
-/plugin install branch-compare@MatthewMaker
+/plugin install branch-compare@branch-compare
 ```
+
+The marketplace is registered under the name in `marketplace.json`, `branch-compare`, not the GitHub owner. `branch-compare@MatthewMaker` fails with "Marketplace 'MatthewMaker' not found".
+
+To update:
+
+```
+/plugin marketplace update branch-compare
+/plugin update branch-compare@branch-compare
+```
+
+Restart Claude Code to load the new version. From a shell: `claude plugin marketplace update branch-compare` and `claude plugin update branch-compare@branch-compare -y`.
 
 ## Usage
 
@@ -87,7 +98,7 @@ export BRANCH_COMPARE_TOOL="code --diff"
 ## How it works
 
 1. Resolves the comparison tool from env var, settings file, or default
-2. Resolves the requested branches (local, remote-tracking, or fetches from origin)
+2. Resolves the requested branches (local, remote-tracking, any commit-ish such as a SHA or tag, or fetches from origin)
 3. For each branch, checks if a git worktree already exists — if so, reuses it
 4. If no worktree exists, creates a temporary detached worktree
 5. Opens both worktree roots in the configured diff tool

@@ -22,6 +22,7 @@ Arguments are optional and passed via `$ARGUMENTS`:
 - No arguments: compare the current branch against `develop`
 - One argument: compare the current branch against that branch
 - Two arguments: compare branch1 (left) against branch2 (right)
+- Either argument can also be a commit SHA, tag or other commit-ish (`HEAD~1`)
 
 ## Filter Options
 
