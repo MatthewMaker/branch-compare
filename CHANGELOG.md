@@ -6,8 +6,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-27
+
 ### Added
 - Either argument can be a commit SHA, tag or other commit-ish (`HEAD~1`, `v1.0^`), not only a branch name. It is checked out in a temporary detached worktree
+
+### Changed
+- **Breaking:** Renamed the skill from `branch-compare` to `compare`, so its full name is `branch-compare:compare` instead of `branch-compare:branch-compare`. Users now type `/branch-compare:compare`; `/branch-compare:branch-compare` no longer exists
+
 ## [1.2.4] - 2026-09-03
 
 ### Changed
@@ -70,6 +76,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [
 - Automatic worktree creation and cleanup
 - Interactive and non-interactive modes
 
+[Unreleased]: https://github.com/MatthewMaker/branch-compare/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.4...v2.0.0
+[1.2.4]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.3...v1.2.4
+[1.2.3]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.2...v1.2.3
+[1.2.2]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/MatthewMaker/branch-compare/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/MatthewMaker/branch-compare/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/MatthewMaker/branch-compare/compare/v1.1.0...v1.1.1

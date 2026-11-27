@@ -1,5 +1,5 @@
 ---
-name: branch-compare
+name: compare
 description: >-
   Compare two git branches side-by-side using a configurable diff tool (defaults
   to Beyond Compare) and temporary worktrees. Use when the user wants to visually
@@ -16,7 +16,7 @@ allowed-tools:
 
 Compare two git branches using a configurable diff tool and worktrees.
 
-Usage: /branch-compare [--filter=<preset|raw|none>] [branch1] [branch2]
+Usage: /branch-compare:compare [--filter=<preset|raw|none>] [branch1] [branch2]
 
 Arguments are optional and passed via `$ARGUMENTS`:
 - No arguments: compare the current branch against `develop`

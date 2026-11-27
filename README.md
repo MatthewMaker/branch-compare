@@ -43,12 +43,12 @@ Restart Claude Code to load the new version. From a shell: `claude plugin market
 
 ## Usage
 
-Inside Claude Code, use the slash command (`/bcomp` also works as a shorthand):
+Inside Claude Code, use the slash command:
 
 ```
-/branch-compare                    # current branch vs develop
-/branch-compare main               # current branch vs main
-/branch-compare feature develop    # feature vs develop
+/branch-compare:compare                    # current branch vs develop
+/branch-compare:compare main               # current branch vs main
+/branch-compare:compare feature develop    # feature vs develop
 ```
 
 ### Direct CLI usage
