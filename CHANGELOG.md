@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/), versioned per [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Either argument can be a commit SHA, tag or other commit-ish (`HEAD~1`, `v1.0^`), not only a branch name. It is checked out in a temporary detached worktree
+
 ## [1.2.3] - 2026-08-28
 
 ### Fixed

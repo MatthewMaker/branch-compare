@@ -87,7 +87,7 @@ export BRANCH_COMPARE_TOOL="code --diff"
 ## How it works
 
 1. Resolves the comparison tool from env var, settings file, or default
-2. Resolves the requested branches (local, remote-tracking, or fetches from origin)
+2. Resolves the requested branches (local, remote-tracking, any commit-ish such as a SHA or tag, or fetches from origin)
 3. For each branch, checks if a git worktree already exists — if so, reuses it
 4. If no worktree exists, creates a temporary detached worktree
 5. Opens both worktree roots in the configured diff tool

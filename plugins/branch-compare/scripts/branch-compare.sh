@@ -6,6 +6,7 @@ set -euo pipefail
 # Usage: branch-compare [--no-prompt] [--filter=<preset|raw|none>] [branch1] [branch2]
 #   branch1 defaults to the current branch
 #   branch2 defaults to "develop"
+#   Either may also be any commit-ish git accepts: a SHA, a tag, HEAD~1, ...
 #
 # Options:
 #   --no-prompt           Auto-delete temporary worktrees without prompting (for non-interactive use)
@@ -146,13 +147,17 @@ else
 fi
 
 # Resolve a branch argument to a valid git ref.
-# Checks: local branch, remote-tracking ref, then tries fetching from origin.
+# Checks: local branch, remote-tracking ref, any other commit-ish (SHA, tag,
+# HEAD~1, ...), then tries fetching from origin.
 resolve_branch() {
   local branch="$1"
   if git rev-parse --verify "refs/heads/$branch" &>/dev/null; then
     return 0
   fi
   if git rev-parse --verify "refs/remotes/$branch" &>/dev/null; then
+    return 0
+  fi
+  if git rev-parse --verify --quiet "$branch^{commit}" &>/dev/null; then
     return 0
   fi
   # If it looks like origin/..., try fetching the remote branch
@@ -163,7 +168,7 @@ resolve_branch() {
       return 0
     fi
   fi
-  echo "Error: branch '$branch' not found (checked local, remote-tracking, and fetch)." >&2
+  echo "Error: branch or commit '$branch' not found (checked local, remote-tracking, commit, and fetch)." >&2
   return 1
 }
 
@@ -226,14 +231,17 @@ path_for_branch() {
     ref="refs/heads/$branch"
   elif git rev-parse --verify "refs/remotes/$branch" &>/dev/null; then
     ref="refs/remotes/$branch"
+  elif ref=$(git rev-parse --verify --quiet "$branch^{commit}"); then
+    : # a SHA, tag or other commit-ish: check out that commit
   else
     echo "Error: could not resolve '$branch' to a ref." >&2
     return 1
   fi
 
-  # Create a temporary worktree
+  # Create a temporary worktree. The name keeps only path-safe characters, so
+  # commit-ish syntax such as HEAD~1 or v1.0^ cannot reach the file system.
   local sanitized
-  sanitized=$(echo "$branch" | tr '/' '-')
+  sanitized=$(printf '%s' "$branch" | tr -c 'A-Za-z0-9._-' '-')
   local tmpdir
   tmpdir="$(git rev-parse --show-toplevel)/../${TEMP_MARKER}${sanitized}-$$"
   echo "Creating temporary worktree for '$branch' at $tmpdir ..." >&2
